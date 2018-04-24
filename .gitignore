@@ -1,3 +1,7 @@
+# public folder, except for images
+public
+!public/img
+
 # Logs
 logs
 *.log
@@ -56,4 +60,3 @@ typings/
 
 # dotenv environment variables file
 .env
-

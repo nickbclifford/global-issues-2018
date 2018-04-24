@@ -1,7 +1,7 @@
 export class Game {
 
-    public dataBalance: number = 0;
+	gigsData = 0;
 
-    // TODO: the rest lol
+	// TODO: the rest lol
 
 }

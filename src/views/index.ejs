@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>TODO: title lol</title>
+        <%- include('partials/header', { title: 'big data game' }) %>
+        <link rel="stylesheet" href="css/index.css">
     </head>
     <body>
-        <p>it works: <%= 2 + 2 %></p>
+        <div id="content">
+            <p>it works: <%= 2 + 2 %></p>
+        </div>
+
+        <%- include('partials/footer') %>
     </body>
 </html>
