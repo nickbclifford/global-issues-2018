@@ -2,6 +2,9 @@
 public
 !public/img
 
+# cause I guess my global ignore doesn't work on Windows?
+.idea
+
 # Logs
 logs
 *.log
