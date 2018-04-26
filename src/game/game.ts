@@ -5,10 +5,10 @@ export class Game {
 	gigsData = 0;
 	money = 0;
 
-	dataPerClick = 0;
-	moneyPerGig = 0;
+	dataPerClick = 1;
+	moneyPerGig = 5;
 
-	autoClickInterval?: number;
+	private intervalId?: number;
 
 	researchedIds: string[] = [];
 
@@ -28,14 +28,15 @@ export class Game {
 	// auto clicker stuff
 
 	set autoClickerTime(value: number) {
-		clearInterval(this.autoClickInterval);
-		this.autoClickInterval = setInterval(() => this.click(), value);
+		clearInterval(this.intervalId);
+		console.log(value); // tslint:disable-line
+		this.intervalId = setInterval(() => this.click(), value);
 	}
 
 	// research
 
 	researchItem(id: string) {
-		if (this.researchedIds.indexOf(id) === -1) {
+		if (this.researchedIds.indexOf(id) > -1) {
 			throw new Error('Item already researched!');
 		}
 

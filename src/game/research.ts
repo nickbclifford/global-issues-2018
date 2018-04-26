@@ -15,7 +15,7 @@ export const availableResearch: { [id: string]: Research } = {
 		costData: 5,
 		costMoney: 5,
 		onResearch(game) {
-			game.money += 100;
+			game.autoClickerTime = 2000;
 		}
 	}
 };
