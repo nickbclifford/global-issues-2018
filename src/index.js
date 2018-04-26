@@ -12,6 +12,7 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 
 // routes
 
+// noinspection JSUnresolvedFunction
 app.get('/', (req, res) => {
     res.render('index');
 });
