@@ -1,18 +1,62 @@
+// imports types for $
+/// <reference types="jquery" />
+
 import { availableResearch } from './research';
+import { numberToUnitString } from './utils';
 
 export class Game {
 
-	gigsData = 0;
-	money = 0;
+	researchedIds: string[] = [];
 
-	dataPerClick = 1;
-	moneyPerGig = 5;
+	private _gigsData = 0;
+	private _money = 0;
+
+	private _dataPerClick = 1;
+	private _moneyPerGig = 5;
 
 	private intervalId?: number;
 
-	researchedIds: string[] = [];
+	// accessors
 
-	// TODO: the rest lol
+	get gigsData() {
+		return this._gigsData;
+	}
+
+	set gigsData(value: number) {
+		this._gigsData = value;
+
+		$('#data span').text(numberToUnitString(value));
+	}
+
+	get money() {
+		return this._money;
+	}
+
+	set money(value: number) {
+		this._money = value;
+
+		$('#money span').text(value.toFixed(2));
+	}
+
+	get dataPerClick() {
+		return this._dataPerClick;
+	}
+
+	set dataPerClick(value: number) {
+		this._dataPerClick = value;
+
+		$('#data-per-click span').text(numberToUnitString(value));
+	}
+
+	get moneyPerGig() {
+		return this._moneyPerGig;
+	}
+
+	set moneyPerGig(value: number) {
+		this._moneyPerGig = value;
+
+		$('#money-per-gig span').text(value.toFixed(2));
+	}
 
 	// core mechanics
 
@@ -21,6 +65,10 @@ export class Game {
 	}
 
 	sellAllData() {
+		if (this.gigsData === 0) {
+			return;
+		}
+
 		this.money += this.moneyPerGig * this.gigsData;
 		this.gigsData = 0;
 	}
@@ -29,7 +77,6 @@ export class Game {
 
 	set autoClickerTime(value: number) {
 		clearInterval(this.intervalId);
-		console.log(value); // tslint:disable-line
 		this.intervalId = setInterval(() => this.click(), value);
 	}
 
