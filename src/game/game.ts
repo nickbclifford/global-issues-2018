@@ -1,12 +1,14 @@
 // imports types for $
 /// <reference types="jquery" />
 
+import { allEvents } from './event';
 import { availableResearch } from './research';
 import { numberToUnitString } from './utils';
 
 export class Game {
 
 	researchedIds: string[] = [];
+	triggeredEvents: string[] = [];
 
 	private _gigsData = 0;
 	private _money = 0;
@@ -15,6 +17,25 @@ export class Game {
 	private _moneyPerGig = 5;
 
 	private intervalId?: number;
+
+	constructor() {
+		// Event triggering loop
+		setInterval(() => {
+			// Get all events that meet their preconditions
+			const allowedEvents = Object.keys(allEvents).filter(k => allEvents[k].precondition(this));
+
+			// Randomly select and trigger an event
+			const selected = allowedEvents[Math.floor(Math.random() * allowedEvents.length)];
+
+			if (typeof selected !== 'string' || this.triggeredEvents.indexOf(selected) > -1) {
+				return;
+				// throw new Error('Event already triggered!');
+			}
+
+			allEvents[selected].trigger(this);
+			this.triggeredEvents.push(selected);
+		}, 20 * 1000);
+	}
 
 	// accessors
 
