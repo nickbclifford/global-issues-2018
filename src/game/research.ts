@@ -9,13 +9,16 @@ export interface Research {
 }
 
 export const availableResearch: { [id: string]: Research } = {
-	test: {
-		title: 'Test Research',
-		description: 'A test research item for testing.',
-		costData: 5,
-		costMoney: 5,
+	clicker: {
+		title: 'Automatic Data Harvester',
+		description:
+			'After manually collecting data for a while, you\'ve figured out some patterns ' +
+			'behind your users\' usage data that might make it easier for you to collect said data. ' +
+			'In fact, you might be able to automate the process!',
+		costData: 20,
+		costMoney: 100,
 		onResearch(game) {
-			game.autoClickerTime = 2000;
+			game.autoClickerTime = 2500;
 		}
 	}
 };

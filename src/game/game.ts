@@ -3,7 +3,7 @@
 
 import { allEvents } from './event';
 import { availableResearch } from './research';
-import { numberToUnitString } from './utils';
+import { numberToUnitString, roundToDigits } from './utils';
 
 export class Game {
 
@@ -16,18 +16,19 @@ export class Game {
 	private _dataPerClick = 1;
 	private _moneyPerGig = 5;
 
+	private _autoClickerTime = 0;
 	private intervalId?: number;
 
 	constructor() {
-		// Event triggering loop
+		// event triggering loop
 		setInterval(() => {
-			// Get all events that meet their preconditions
+			// get all events that meet their preconditions
 			const allowedEvents = Object.keys(allEvents).filter(k => allEvents[k].precondition(this));
 
-			// Randomly select and trigger an event
+			// randomly select and trigger an event
 			const selected = allowedEvents[Math.floor(Math.random() * allowedEvents.length)];
 
-			if (typeof selected !== 'string' || this.triggeredEvents.indexOf(selected) > -1) {
+			if (typeof selected === 'undefined' || this.triggeredEvents.indexOf(selected) > -1) {
 				return;
 				// throw new Error('Event already triggered!');
 			}
@@ -35,6 +36,13 @@ export class Game {
 			allEvents[selected].trigger(this);
 			this.triggeredEvents.push(selected);
 		}, 20 * 1000);
+
+		// bind buttons to actions
+		const dataBtn = $('#collect-data');
+		dataBtn.on('click', () => this.click());
+
+		const sellBtn = $('#sell-data');
+		sellBtn.on('click', () => this.sellAllData());
 	}
 
 	// accessors
@@ -56,7 +64,7 @@ export class Game {
 	set money(value: number) {
 		this._money = value;
 
-		$('#money span').text(value.toFixed(2));
+		$('#money span').text(roundToDigits(value, 2));
 	}
 
 	get dataPerClick() {
@@ -96,8 +104,23 @@ export class Game {
 
 	// auto clicker stuff
 
+	get autoClickerTime() {
+		return this._autoClickerTime;
+	}
+
 	set autoClickerTime(value: number) {
+		this._autoClickerTime = value;
+
 		clearInterval(this.intervalId);
+
+		const $dataPerSec = $('#data-per-sec span');
+
+		if (value === 0) {
+			$dataPerSec.text('0 GB');
+			return;
+		}
+
+		$dataPerSec.text(numberToUnitString(this.dataPerClick / (value / 1000)));
 		this.intervalId = setInterval(() => this.click(), value);
 	}
 
@@ -110,30 +133,19 @@ export class Game {
 
 		const item = availableResearch[id];
 
-		this.spendData(item.costData);
-		this.spendMoney(item.costMoney);
+		if (item.costData > this.gigsData) {
+			throw new Error('Insufficient data!');
+		}
+		if (item.costMoney > this.money) {
+			throw new Error('Insufficient funds!');
+		}
+
+		this.gigsData -= item.costData;
+		this.money -= item.costMoney;
 
 		item.onResearch(this);
 
 		this.researchedIds.push(id);
-	}
-
-	// spending checkers
-
-	private spendData(cost: number) {
-		if (cost > this.gigsData) {
-			throw new Error('Insufficient data!');
-		}
-
-		this.gigsData -= cost;
-	}
-
-	private spendMoney(cost: number) {
-		if (cost > this.money) {
-			throw new Error('Insufficient funds!');
-		}
-
-		this.money -= cost;
 	}
 
 }

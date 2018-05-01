@@ -6,11 +6,13 @@
     </head>
     <body>
         <div id="content">
-            <p>it works: <%= 2 + 2 %></p>
+            <button type="button" class="btn btn-primary" id="collect-data">Collect Data</button>
+            <button type="button" class="btn btn-success" id="sell-data">Sell All Data</button>
             <p id="data">Data: <span>0 GB</span></p>
             <p id="money">Money: $<span>0</span></p>
-            <p id="data-per-click">Data gained per click: <span>1.00 GB</span></p>
-            <p id="money-per-gig">Money gained per GB data sold: $<span>5.00</span></p>
+            <p id="data-per-click">Data gained per click: <span>1 GB</span></p>
+            <p id="data-per-sec">Data gained per second: <span>0 GB</span></p>
+            <p id="money-per-gig">Money gained per GB data sold: $<span>5</span></p>
         </div>
 
         <%- include('partials/footer') %>
