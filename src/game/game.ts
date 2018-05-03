@@ -11,15 +11,21 @@ export class Game {
 	triggeredEvents: string[] = [];
 
 	private _gigsData = 0;
+	private $gigsData = $('#data span');
 	private _money = 0;
+	private $money = $('#money span');
 
 	private _dataPerClick = 1;
+	private $dataPerClick = $('#data-per-click span');
 	private _moneyPerGig = 5;
+	private $moneyPerGig = $('#money-per-gig span');
 
 	private _autoClickerTime = 0;
+	private $dataPerSec = $('#data-per-sec span');
 	private intervalId?: number;
 
 	constructor() {
+
 		// event triggering loop
 		setInterval(() => {
 			// get all events that meet their preconditions
@@ -43,6 +49,20 @@ export class Game {
 
 		const sellBtn = $('#sell-data');
 		sellBtn.on('click', () => this.sellAllData());
+
+		const $researchItems = $('#research-items');
+		// draw available research
+		for (const researchId of Object.keys(availableResearch)) {
+			const item = availableResearch[researchId];
+			$researchItems.append(`
+				<div class="research-item" id="${researchId}">
+					<h3>${item.title}</h3>
+					<p>${item.description}</p>
+					<h5><strong>Data Consumed: </strong>${numberToUnitString(item.costData)}</h5>
+					<h5><strong>Money Used: </strong>$${roundToDigits(item.costMoney, 2)}</h5>
+				</div>
+			`);
+		}
 	}
 
 	// accessors
@@ -54,7 +74,7 @@ export class Game {
 	set gigsData(value: number) {
 		this._gigsData = value;
 
-		$('#data span').text(numberToUnitString(value));
+		this.$gigsData.text(numberToUnitString(value));
 	}
 
 	get money() {
@@ -64,7 +84,7 @@ export class Game {
 	set money(value: number) {
 		this._money = value;
 
-		$('#money span').text(roundToDigits(value, 2));
+		this.$money.text(roundToDigits(value, 2));
 	}
 
 	get dataPerClick() {
@@ -74,7 +94,7 @@ export class Game {
 	set dataPerClick(value: number) {
 		this._dataPerClick = value;
 
-		$('#data-per-click span').text(numberToUnitString(value));
+		this.$dataPerClick.text(numberToUnitString(value));
 	}
 
 	get moneyPerGig() {
@@ -84,7 +104,7 @@ export class Game {
 	set moneyPerGig(value: number) {
 		this._moneyPerGig = value;
 
-		$('#money-per-gig span').text(value.toFixed(2));
+		this.$moneyPerGig.text(value.toFixed(2));
 	}
 
 	// core mechanics
@@ -113,14 +133,12 @@ export class Game {
 
 		clearInterval(this.intervalId);
 
-		const $dataPerSec = $('#data-per-sec span');
-
 		if (value === 0) {
-			$dataPerSec.text('0 GB');
+			this.$dataPerSec.text('0 GB');
 			return;
 		}
 
-		$dataPerSec.text(numberToUnitString(this.dataPerClick / (value / 1000)));
+		this.$dataPerSec.text(numberToUnitString(this.dataPerClick / (value / 1000)));
 		this.intervalId = setInterval(() => this.click(), value);
 	}
 

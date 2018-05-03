@@ -1,6 +1,26 @@
 #content {
 	display: flex;
-	min-height: 100vh;
+	align-items: center;
+	justify-content: space-around;
+	height: 100vh;
+	flex-flow: row wrap;
+}
+
+#research {
+	max-width: 40vw;
+}
+
+.research-item {
+	padding-top: 1%;
+	padding-bottom: 1%;
+
+	h4 {
+		font-size: 1.25em;
+	}
+}
+
+.flex-content {
+	display: flex;
 	align-items: center;
 	justify-content: center;
 	flex-flow: column wrap;

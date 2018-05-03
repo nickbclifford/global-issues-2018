@@ -6,13 +6,21 @@
     </head>
     <body>
         <div id="content">
-            <button type="button" class="btn btn-primary" id="collect-data">Collect Data</button>
-            <button type="button" class="btn btn-success" id="sell-data">Sell All Data</button>
-            <p id="data">Data: <span>0 GB</span></p>
-            <p id="money">Money: $<span>0</span></p>
-            <p id="data-per-click">Data gained per click: <span>1 GB</span></p>
-            <p id="data-per-sec">Data gained per second: <span>0 GB</span></p>
-            <p id="money-per-gig">Money gained per GB data sold: $<span>5</span></p>
+            <div id="main-panel" class="flex-content">
+                <button type="button" class="btn btn-primary" id="collect-data">Collect Data</button>
+                <button type="button" class="btn btn-success" id="sell-data">Sell All Data</button>
+                <p id="data">Data: <span>0 GB</span></p>
+                <p id="money">Money: $<span>0</span></p>
+                <p id="data-per-click">Data gained per click: <span>1 GB</span></p>
+                <p id="data-per-sec">Data gained per second: <span>0 GB</span></p>
+                <p id="money-per-gig">Money gained per GB data sold: $<span>5</span></p>
+            </div>
+            <div id="research">
+                <h1>Research</h1>
+                <div id="research-items" class="flex-content">
+                    <%# Items added inside Game constructor %>
+                </div>
+            </div>
         </div>
 
         <%- include('partials/footer') %>
