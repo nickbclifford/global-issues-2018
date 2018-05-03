@@ -133,6 +133,10 @@ export class Game {
 
 		const item = availableResearch[id];
 
+		if (item.prereqs && item.prereqs!.every(p => this.researchedIds.indexOf(p) <= -1)) {
+			throw new Error('Missing prerequisite to research!');
+		}
+
 		if (item.costData > this.gigsData) {
 			throw new Error('Insufficient data!');
 		}

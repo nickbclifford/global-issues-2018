@@ -13,5 +13,5 @@ export function numberToUnitString(num: number) {
 
 export function roundToDigits(num: number, digits: number) {
 	const powerOfTen = 10 ** digits;
-	return Math.round((num * powerOfTen) / powerOfTen);
+	return Math.round(num * powerOfTen) / powerOfTen;
 }
