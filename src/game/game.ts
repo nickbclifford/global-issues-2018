@@ -7,6 +7,7 @@ import { numberToUnitString, roundToDigits } from './utils';
 
 export class Game {
 
+	private $researchItems = $('#research-items');
 	researchedIds: string[] = [];
 	triggeredEvents: string[] = [];
 
@@ -50,11 +51,10 @@ export class Game {
 		const sellBtn = $('#sell-data');
 		sellBtn.on('click', () => this.sellAllData());
 
-		const $researchItems = $('#research-items');
 		// draw available research
 		for (const researchId of Object.keys(availableResearch)) {
 			const item = availableResearch[researchId];
-			$researchItems.append(`
+			const $item = $(`
 				<div class="research-item" id="${researchId}">
 					<h3>${item.title}</h3>
 					<p>${item.description}</p>
@@ -62,7 +62,11 @@ export class Game {
 					<h5><strong>Money Used: </strong>$${roundToDigits(item.costMoney, 2)}</h5>
 				</div>
 			`);
+
+			this.$researchItems.append($item);
 		}
+
+		this.checkClickHandlers();
 	}
 
 	// accessors
@@ -75,6 +79,7 @@ export class Game {
 		this._gigsData = value;
 
 		this.$gigsData.text(numberToUnitString(value));
+		this.checkClickHandlers();
 	}
 
 	get money() {
@@ -85,6 +90,7 @@ export class Game {
 		this._money = value;
 
 		this.$money.text(roundToDigits(value, 2));
+		this.checkClickHandlers();
 	}
 
 	get dataPerClick() {
@@ -168,6 +174,26 @@ export class Game {
 		item.onResearch(this);
 
 		this.researchedIds.push(id);
+	}
+
+	private checkClickHandlers() {
+		for (const itemEl of this.$researchItems.children().toArray()) {
+			const $item = $(itemEl);
+			const researchId = $item.attr('id')!;
+			const itemObj = availableResearch[researchId];
+
+			if (itemObj.costData > this.gigsData || itemObj.costMoney > this.money) {
+				$item.off('click').on('click', () => {
+					$item.animate({ backgroundColor: '#d98c8c' }, 150)
+						.animate({ backgroundColor: 'transparent' });
+				});
+			} else {
+				$item.off('click').on('click', () => {
+					this.researchItem(researchId);
+					$item.fadeOut();
+				});
+			}
+		}
 	}
 
 }
