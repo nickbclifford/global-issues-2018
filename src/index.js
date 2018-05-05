@@ -17,6 +17,11 @@ app.get('/', (req, res) => {
     res.render('index');
 });
 
+// noinspection JSUnresolvedFunction
+app.get('/game', (req, res) => {
+	res.render('game');
+});
+
 // turn on server
 
 app.listen(3000, () => {

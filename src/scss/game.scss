@@ -1,0 +1,41 @@
+@import "global";
+
+#content {
+	display: flex;
+	align-items: center;
+	justify-content: space-around;
+	height: 100vh;
+	flex-flow: row wrap;
+}
+
+#main-panel .btn-group {
+	margin-bottom: 2.5%;
+}
+
+#events {
+	max-height: 50vh;
+	width: 40vw;
+}
+
+#event-log {
+	margin-top: 5%;
+}
+
+#research {
+	width: 40vw;
+}
+
+#research-items {
+	max-height: 90vh;
+	overflow-y: auto;
+	flex-direction: row;
+}
+
+.research-item {
+	margin-top: 1%;
+	margin-bottom: 1%;
+
+	h4 {
+		font-size: 1.25em;
+	}
+}

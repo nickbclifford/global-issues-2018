@@ -5,6 +5,10 @@ export function numberToUnitString(num: number) {
 		return '0 GB';
 	}
 
+	if (num < 1) {
+		return `${roundToDigits(num, 2)} GB`;
+	}
+
 	const exponent = Math.floor(Math.log10(num));
 	const unitIndex = Math.floor(exponent / 3);
 
@@ -14,4 +18,8 @@ export function numberToUnitString(num: number) {
 export function roundToDigits(num: number, digits: number) {
 	const powerOfTen = 10 ** digits;
 	return Math.round(num * powerOfTen) / powerOfTen;
+}
+
+export function isInRange(num: number, lower: number, upper: number) {
+	return num <= upper && num >= lower;
 }

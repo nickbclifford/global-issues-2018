@@ -8,7 +8,7 @@ tsPipeline.registerBuildGulpTasks(
     gulp,
     {
         entryPoints: {
-            index: path.join(__dirname, 'src', 'game', 'index.ts')
+            main: path.join(__dirname, 'src', 'game', 'main.ts')
         },
         outputDir: path.join(__dirname, 'src', 'public', 'js')
     }
@@ -16,7 +16,7 @@ tsPipeline.registerBuildGulpTasks(
 
 // compile Sass
 gulp.task('sass', () => {
-    return gulp.src(path.join(__dirname, 'src', 'scss', '**', '*.scss'))
+	return gulp.src(path.join(__dirname, 'src', 'scss', '**', '*.scss'))
         .pipe(sass().on('error', sass.logError))
         .pipe(gulp.dest(path.join(__dirname, 'src', 'public', 'css')));
 });
@@ -33,5 +33,5 @@ gulp.task('ts:watch', ['tsPipeline:watch']);
 
 // general tasks
 gulp.task('dev', ['sass', 'sass:watch', 'ts:watch']);
-gulp.task('prod', ['sass', 'lint', 'ts:prod']);
+gulp.task('prod', ['sass', 'ts:prod']);
 gulp.task('default', ['dev']);

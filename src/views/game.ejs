@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <%- include('partials/header', { title: 'big data game' }) %>
+        <link rel="stylesheet" href="css/game.css">
+    </head>
+    <body>
+        <div id="content">
+            <div id="left-panel">
+                <div id="main-panel" class="flex-content">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="btn btn-primary" id="collect-data">Collect Data</button>
+                        <button type="button" class="btn btn-success" id="sell-data" data-toggle="tooltip">Sell All Data</button>
+                        <button type="button" class="btn btn-warning" id="sell-half-data" data-toggle="tooltip">Sell Half of Data</button>
+                    </div>
+                    <p id="data">Data: <span>0 GB</span></p>
+                    <p id="money">Money: $<span>0</span></p>
+                    <p id="data-per-click">Data gained per click: <span>1 GB</span></p>
+                    <p id="data-per-sec">Data gained per second: <span>0 GB</span></p>
+                    <p id="money-per-gig">Money gained per GB data sold: $<span>5</span></p>
+                </div>
+                <hr>
+                <div id="events" class="flex-content">
+                    <h1>Event Log</h1>
+                    <div id="event-log">
+                        <p id="no-events">No events yet!</p>
+                        <%# Events added inside event loop %>
+                    </div>
+                </div>
+            </div>
+            <div id="research">
+                <h1>Research</h1>
+                <div id="research-items" class="flex-content">
+                    <%# Items added inside Game constructor %>
+                </div>
+            </div>
+        </div>
+
+        <%- include('partials/footer') %>
+        <script src="js/main.js"></script>
+    </body>
+</html>

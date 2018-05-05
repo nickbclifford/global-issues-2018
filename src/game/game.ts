@@ -1,5 +1,6 @@
-// imports types for $
+// imports types for $ and Bootstrap plugins
 /// <reference types="jquery" />
+/// <reference types="bootstrap" />
 
 import { allEvents } from './event';
 import { availableResearch } from './research';
@@ -9,6 +10,7 @@ export class Game {
 
 	private $researchItems = $('#research-items');
 	researchedIds: string[] = [];
+	private $eventLog = $('#event-log');
 	triggeredEvents: string[] = [];
 
 	private _gigsData = 0;
@@ -26,7 +28,6 @@ export class Game {
 	private intervalId?: number;
 
 	constructor() {
-
 		// event triggering loop
 		setInterval(() => {
 			// get all events that meet their preconditions
@@ -40,21 +41,56 @@ export class Game {
 				// throw new Error('Event already triggered!');
 			}
 
-			allEvents[selected].trigger(this);
+			const event = allEvents[selected];
+
+			event.trigger(this);
+
+			if (this.triggeredEvents.length < 1) {
+				this.$eventLog.children('#no-events').hide();
+			}
+
 			this.triggeredEvents.push(selected);
-		}, 20 * 1000);
+
+			const now = new Date();
+			const secs = now.getSeconds();
+			this.$eventLog.append(`
+				<div class="event" id="${selected}">
+					<h4>${now.getHours()}:${now.getMinutes()}:${secs < 10 ? '0' + secs : secs} - ${event.title}</h4>
+					<p>${event.description}</p>
+				</div>
+			`);
+		}, 30 * 1000);
 
 		// bind buttons to actions
-		const dataBtn = $('#collect-data');
-		dataBtn.on('click', () => this.click());
+		const $dataBtn = $('#collect-data');
+		$dataBtn.on('click', () => this.click());
 
-		const sellBtn = $('#sell-data');
-		sellBtn.on('click', () => this.sellAllData());
+		const $sellBtn = $('#sell-data');
+		$sellBtn
+			.on('click', () => this.sellPercentData(100))
+			.tooltip({
+				container: 'body',
+				title: () => {
+					const { profit } = this.percentDataInfo(100);
+					return '$' + roundToDigits(profit, 2);
+				}
+			});
+
+		const $sellHalfBtn = $('#sell-half-data');
+		$sellHalfBtn
+			.on('click', () => this.sellPercentData(50))
+			.tooltip({
+				container: 'body',
+				title: () => {
+					const { profit } = this.percentDataInfo(50);
+					return '$' + roundToDigits(profit, 2);
+				}
+			});
 
 		// draw available research
 		for (const researchId of Object.keys(availableResearch)) {
 			const item = availableResearch[researchId];
-			const $item = $(`
+			this.$researchItems.append(`
 				<div class="research-item" id="${researchId}">
 					<h3>${item.title}</h3>
 					<p>${item.description}</p>
@@ -62,8 +98,6 @@ export class Game {
 					<h5><strong>Money Used: </strong>$${roundToDigits(item.costMoney, 2)}</h5>
 				</div>
 			`);
-
-			this.$researchItems.append($item);
 		}
 
 		this.checkClickHandlers();
@@ -110,7 +144,7 @@ export class Game {
 	set moneyPerGig(value: number) {
 		this._moneyPerGig = value;
 
-		this.$moneyPerGig.text(value.toFixed(2));
+		this.$moneyPerGig.text(roundToDigits(value, 2));
 	}
 
 	// core mechanics
@@ -119,13 +153,24 @@ export class Game {
 		this.gigsData += this.dataPerClick;
 	}
 
-	sellAllData() {
+	percentDataInfo(percent: number) {
+		const amount = this.gigsData * (percent / 100);
+
+		return {
+			amount,
+			profit: this.moneyPerGig * amount
+		};
+	}
+
+	sellPercentData(percent: number) {
 		if (this.gigsData === 0) {
 			return;
 		}
 
-		this.money += this.moneyPerGig * this.gigsData;
-		this.gigsData = 0;
+		const { amount, profit } = this.percentDataInfo(percent);
+
+		this.money += profit;
+		this.gigsData -= amount;
 	}
 
 	// auto clicker stuff
@@ -182,7 +227,9 @@ export class Game {
 			const researchId = $item.attr('id')!;
 			const itemObj = availableResearch[researchId];
 
-			if (itemObj.costData > this.gigsData || itemObj.costMoney > this.money) {
+			if (itemObj.costData > this.gigsData ||
+				itemObj.costMoney > this.money ||
+				(itemObj.prereqs && itemObj.prereqs!.every(p => this.researchedIds.indexOf(p) <= -1))) {
 				$item.off('click').on('click', () => {
 					$item.animate({ backgroundColor: '#d98c8c' }, 150)
 						.animate({ backgroundColor: 'transparent' });

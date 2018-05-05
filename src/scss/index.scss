@@ -1,27 +1,5 @@
-#content {
-	display: flex;
-	align-items: center;
-	justify-content: space-around;
+@import "global";
+
+#menu {
 	height: 100vh;
-	flex-flow: row wrap;
-}
-
-#research {
-	max-width: 40vw;
-}
-
-.research-item {
-	margin-top: 1%;
-	margin-bottom: 1%;
-
-	h4 {
-		font-size: 1.25em;
-	}
-}
-
-.flex-content {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-flow: column wrap;
 }
