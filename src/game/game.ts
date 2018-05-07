@@ -96,7 +96,7 @@ export class Game {
 		// draw available research
 		for (const researchId of Object.keys(availableResearch)) {
 			const item = availableResearch[researchId];
-			this.$researchItems.append(`
+			const $item = $(`
 				<div class="research-item" id="${researchId}">
 					<h3>${item.title}</h3>
 					<p>${item.description}</p>
@@ -104,6 +104,14 @@ export class Game {
 					<h5><strong>Money Used: </strong>$${roundToDigits(item.costMoney, 2)}</h5>
 				</div>
 			`);
+
+			if (item.prereqs) {
+				$item.append(`
+					<h5><strong>Prerequisites: </strong>${item.prereqs.map(i => availableResearch[i].title).join(', ')}</h5>
+				`);
+			}
+
+			this.$researchItems.append($item);
 		}
 
 		this.checkClickHandlers();
