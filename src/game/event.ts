@@ -21,7 +21,7 @@ export const allEvents: { [id: string]: Event } = {
 			return isInRange(game.researchedIds.length, 3, 5);
 		},
 		trigger(game) {
-			game.money += 3000;
+			game.money += 2000;
 			game.gigsData += 800;
 		}
 	},
@@ -38,14 +38,25 @@ export const allEvents: { [id: string]: Event } = {
 	software: {
 		title: 'New Processing Software',
 		description:
-			'A new open source big data processing software suite just came out! It was designed to meet the needs ' +
+			'A new big data processing software suite was just released! It was designed to meet the needs ' +
 			'of both businesses and enthusiasts. After implementing it, you realized that it actually made your ' +
-			'own harvesting software a little faster! Exciting!',
+			'own harvesting software a little faster. Exciting!',
 		precondition(game) {
 			return game.autoClickerTime !== 0;
 		},
 		trigger(game) {
-			game.autoClickerTime /= 1.2;
+			game.autoClickerTime /= 1.1;
 		}
+	},
+	openGov: {
+		title: 'Open Government',
+		description:
+			'Governments around the world have started to implement open governance policies. They now ' +
+			'share sets of governance data, such as crime, traffic, and policy-making data, with the public. ' +
+			'This is exciting news for the big data world!',
+		precondition(game) {
+			return game.researchedIds.length >= 4;
+		},
+		trigger: noOp
 	}
 };

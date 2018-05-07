@@ -23,3 +23,7 @@ export function roundToDigits(num: number, digits: number) {
 export function isInRange(num: number, lower: number, upper: number) {
 	return num <= upper && num >= lower;
 }
+
+export function padToTwoDigits(num: number) {
+	return num < 10 ? '0' + num : num.toString();
+}

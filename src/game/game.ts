@@ -4,7 +4,7 @@
 
 import { allEvents } from './event';
 import { availableResearch } from './research';
-import { numberToUnitString, roundToDigits } from './utils';
+import { numberToUnitString, padToTwoDigits, roundToDigits } from './utils';
 
 export class Game {
 
@@ -30,6 +30,11 @@ export class Game {
 	constructor() {
 		// event triggering loop
 		setInterval(() => {
+			// 50% chance of event happening every 20 seconds
+			if (Math.random() > 0.5) {
+				return;
+			}
+
 			// get all events that meet their preconditions
 			const allowedEvents = Object.keys(allEvents).filter(k => allEvents[k].precondition(this));
 
@@ -38,7 +43,6 @@ export class Game {
 
 			if (typeof selected === 'undefined' || this.triggeredEvents.indexOf(selected) > -1) {
 				return;
-				// throw new Error('Event already triggered!');
 			}
 
 			const event = allEvents[selected];
@@ -52,14 +56,16 @@ export class Game {
 			this.triggeredEvents.push(selected);
 
 			const now = new Date();
+			const hours = now.getHours();
+			const mins = now.getMinutes();
 			const secs = now.getSeconds();
 			this.$eventLog.append(`
 				<div class="event" id="${selected}">
-					<h4>${now.getHours()}:${now.getMinutes()}:${secs < 10 ? '0' + secs : secs} - ${event.title}</h4>
+					<h4>${padToTwoDigits(hours)}:${padToTwoDigits(mins)}:${padToTwoDigits(secs)} - ${event.title}</h4>
 					<p>${event.description}</p>
 				</div>
 			`);
-		}, 30 * 1000);
+		}, 20 * 1000);
 
 		// bind buttons to actions
 		const $dataBtn = $('#collect-data');
@@ -231,7 +237,8 @@ export class Game {
 				itemObj.costMoney > this.money ||
 				(itemObj.prereqs && itemObj.prereqs!.every(p => this.researchedIds.indexOf(p) <= -1))) {
 				$item.off('click').on('click', () => {
-					$item.animate({ backgroundColor: '#d98c8c' }, 150)
+					$item
+						.animate({ backgroundColor: '#d98c8c' }, 150)
 						.animate({ backgroundColor: 'transparent' });
 				});
 			} else {

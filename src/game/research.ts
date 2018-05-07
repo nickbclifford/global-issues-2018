@@ -79,9 +79,22 @@ export const availableResearch: { [id: string]: Research } = {
 			'ads can be better targeted to them. They\'ll pay you a lot more, so where\'s the harm in it?',
 		costData: 1000,
 		costMoney: 5000,
-		prereqs: ['money1'],
+		prereqs: ['money1', 'data2'],
 		onResearch(game) {
 			game.moneyPerGig = 25;
+		}
+	},
+	clicker3: {
+		title: 'Global Data Harvester',
+		description:
+			'You really like the performance boost given by spreading your data collection processes over multiple ' +
+			'servers, but you feel like you could go further. Perhaps you could spread your servers around the world ' +
+			'to make sure each user has a fast connection to your platform. That would make your program even more efficient.',
+		costData: 1000,
+		costMoney: 10000,
+		prereqs: ['clicker2', 'data2'],
+		onResearch(game) {
+			game.autoClickerTime = 450;
 		}
 	}
 };
