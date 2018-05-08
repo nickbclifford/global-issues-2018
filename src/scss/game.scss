@@ -6,15 +6,54 @@
 	justify-content: space-around;
 	height: 100vh;
 	flex-flow: row wrap;
+
+	> div {
+		width: 40vw;
+	}
 }
 
 #main-panel .btn-group {
+	margin-top: 2.5%;
 	margin-bottom: 2.5%;
+}
+
+#big-number-stats {
+	flex-flow: row nowrap;
+}
+
+.big-stat {
+	padding-left: 1vw;
+	padding-right: 1vw;
+
+	height: 10vh;
+	width: 10vw;
+
+	h3 {
+		text-align: center;
+		font-size: 1.25em;
+	}
+
+	p {
+		text-align: center;
+	}
+
+	.value {
+		font-size: 3em;
+	}
+
+	.unit {
+		font-size: 1em;
+	}
+
+	border-right: 1px solid transparentize(black, 0.8);
+
+	&:last-of-type {
+		border-right: none;
+	}
 }
 
 #events {
 	max-height: 50vh;
-	width: 40vw;
 }
 
 #event-log {

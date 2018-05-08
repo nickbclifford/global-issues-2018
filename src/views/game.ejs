@@ -8,14 +8,28 @@
         <div id="content">
             <div id="left-panel">
                 <div id="main-panel" class="flex-content">
+                    <div id="big-number-stats" class="flex-content">
+                        <div id="data" class="big-stat">
+                            <h3>Data</h3>
+                            <p><span class="value">0</span> <span class="unit">GB</span></p>
+                        </div>
+                        <div id="money" class="big-stat">
+                            <h3>Money</h3>
+                            <p><span class="unit">$</span><span class="value">0</span></p>
+                        </div>
+                        <div id="data-per-click" class="big-stat">
+                            <h3>Data/Click</h3>
+                            <p><span class="value">1</span> <span class="unit">GB</span></p>
+                        </div>
+                    </div>
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-primary" id="collect-data">Collect Data</button>
                         <button type="button" class="btn btn-success" id="sell-data" data-toggle="tooltip">Sell All Data</button>
                         <button type="button" class="btn btn-warning" id="sell-half-data" data-toggle="tooltip">Sell Half of Data</button>
                     </div>
-                    <p id="data">Data: <span>0 GB</span></p>
-                    <p id="money">Money: $<span>0</span></p>
-                    <p id="data-per-click">Data gained per click: <span>1 GB</span></p>
+                    <!--<p id="data">Data: <span>0 GB</span></p>-->
+                    <!--<p id="money">Money: $<span>0</span></p>-->
+                    <!--<p id="data-per-click">Data gained per click: <span>1 GB</span></p>-->
                     <p id="data-per-sec">Data gained per second: <span>0 GB</span></p>
                     <p id="money-per-gig">Money gained per GB data sold: $<span>5</span></p>
                 </div>

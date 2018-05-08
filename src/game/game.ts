@@ -4,7 +4,17 @@
 
 import { allEvents } from './event';
 import { availableResearch } from './research';
-import { numberToUnitString, padToTwoDigits, roundToDigits } from './utils';
+import {
+	arrayIncludes,
+	numberToUnits,
+	numToUnitString,
+	padToTwoDigits,
+	roundToDigits,
+	ValueWithUnit,
+} from './utils';
+
+type $Stat = Record<'value' | 'unit', JQuery>;
+type BigNumberStats = 'data' | 'money' | 'data-per-click';
 
 export class Game {
 
@@ -13,13 +23,12 @@ export class Game {
 	private $eventLog = $('#event-log');
 	triggeredEvents: string[] = [];
 
-	private _gigsData = 0;
-	private $gigsData = $('#data span');
-	private _money = 0;
-	private $money = $('#money span');
+	private $bigNumberStats!: Record<BigNumberStats, $Stat>;
 
+	private _data = 0;
+	private _money = 0;
 	private _dataPerClick = 1;
-	private $dataPerClick = $('#data-per-click span');
+
 	private _moneyPerGig = 5;
 	private $moneyPerGig = $('#money-per-gig span');
 
@@ -28,6 +37,16 @@ export class Game {
 	private intervalId?: number;
 
 	constructor() {
+		const builtStats = {} as any;
+		for (const id of ['data', 'money', 'data-per-click']) {
+			builtStats[id] = {
+				value: $(`#${id} span.value`),
+				unit: $(`#${id} span.unit`)
+			};
+		}
+
+		this.$bigNumberStats = builtStats;
+
 		// event triggering loop
 		setInterval(() => {
 			// 50% chance of event happening every 20 seconds
@@ -41,7 +60,7 @@ export class Game {
 			// randomly select and trigger an event
 			const selected = allowedEvents[Math.floor(Math.random() * allowedEvents.length)];
 
-			if (typeof selected === 'undefined' || this.triggeredEvents.indexOf(selected) > -1) {
+			if (typeof selected === 'undefined' || arrayIncludes(this.triggeredEvents, selected)) {
 				return;
 			}
 
@@ -100,7 +119,7 @@ export class Game {
 				<div class="research-item" id="${researchId}">
 					<h3>${item.title}</h3>
 					<p>${item.description}</p>
-					<h5><strong>Data Consumed: </strong>${numberToUnitString(item.costData)}</h5>
+					<h5><strong>Data Consumed: </strong>${numToUnitString(item.costData)}</h5>
 					<h5><strong>Money Used: </strong>$${roundToDigits(item.costMoney, 2)}</h5>
 				</div>
 			`);
@@ -119,14 +138,14 @@ export class Game {
 
 	// accessors
 
-	get gigsData() {
-		return this._gigsData;
+	get data() {
+		return this._data;
 	}
 
-	set gigsData(value: number) {
-		this._gigsData = value;
+	set data(value: number) {
+		this._data = value;
 
-		this.$gigsData.text(numberToUnitString(value));
+		this.updateBigNumberStat('data', numberToUnits(value));
 		this.checkClickHandlers();
 	}
 
@@ -137,7 +156,7 @@ export class Game {
 	set money(value: number) {
 		this._money = value;
 
-		this.$money.text(roundToDigits(value, 2));
+		this.updateBigNumberStat('money', { value, unit: '$' });
 		this.checkClickHandlers();
 	}
 
@@ -148,7 +167,7 @@ export class Game {
 	set dataPerClick(value: number) {
 		this._dataPerClick = value;
 
-		this.$dataPerClick.text(numberToUnitString(value));
+		this.updateBigNumberStat('data-per-click', numberToUnits(value));
 	}
 
 	get moneyPerGig() {
@@ -164,11 +183,11 @@ export class Game {
 	// core mechanics
 
 	click() {
-		this.gigsData += this.dataPerClick;
+		this.data += this.dataPerClick;
 	}
 
-	percentDataInfo(percent: number) {
-		const amount = this.gigsData * (percent / 100);
+	private percentDataInfo(percent: number) {
+		const amount = this.data * (percent / 100);
 
 		return {
 			amount,
@@ -177,14 +196,14 @@ export class Game {
 	}
 
 	sellPercentData(percent: number) {
-		if (this.gigsData === 0) {
+		if (this.data === 0) {
 			return;
 		}
 
 		const { amount, profit } = this.percentDataInfo(percent);
 
 		this.money += profit;
-		this.gigsData -= amount;
+		this.data -= amount;
 	}
 
 	// auto clicker stuff
@@ -203,31 +222,31 @@ export class Game {
 			return;
 		}
 
-		this.$dataPerSec.text(numberToUnitString(this.dataPerClick / (value / 1000)));
+		this.$dataPerSec.text(numToUnitString(this.dataPerClick / (value / 1000)));
 		this.intervalId = setInterval(() => this.click(), value);
 	}
 
 	// research
 
 	researchItem(id: string) {
-		if (this.researchedIds.indexOf(id) > -1) {
+		if (arrayIncludes(this.researchedIds, id)) {
 			throw new Error('Item already researched!');
 		}
 
 		const item = availableResearch[id];
 
-		if (item.prereqs && item.prereqs!.every(p => this.researchedIds.indexOf(p) <= -1)) {
+		if (item.prereqs && item.prereqs!.every(p => arrayIncludes(this.researchedIds, p))) {
 			throw new Error('Missing prerequisite to research!');
 		}
 
-		if (item.costData > this.gigsData) {
+		if (item.costData > this.data) {
 			throw new Error('Insufficient data!');
 		}
 		if (item.costMoney > this.money) {
 			throw new Error('Insufficient funds!');
 		}
 
-		this.gigsData -= item.costData;
+		this.data -= item.costData;
 		this.money -= item.costMoney;
 
 		item.onResearch(this);
@@ -241,9 +260,9 @@ export class Game {
 			const researchId = $item.attr('id')!;
 			const itemObj = availableResearch[researchId];
 
-			if (itemObj.costData > this.gigsData ||
+			if (itemObj.costData > this.data ||
 				itemObj.costMoney > this.money ||
-				(itemObj.prereqs && itemObj.prereqs!.every(p => this.researchedIds.indexOf(p) <= -1))) {
+				(itemObj.prereqs && itemObj.prereqs!.every(p => arrayIncludes(this.researchedIds, p)))) {
 				$item.off('click').on('click', () => {
 					$item
 						.animate({ backgroundColor: '#d98c8c' }, 150)
@@ -256,6 +275,13 @@ export class Game {
 				});
 			}
 		}
+	}
+
+	private updateBigNumberStat(stat: BigNumberStats, { value, unit }: ValueWithUnit) {
+		const $stat = this.$bigNumberStats[stat];
+
+		$stat.value.text(value);
+		$stat.unit.text(unit);
 	}
 
 }

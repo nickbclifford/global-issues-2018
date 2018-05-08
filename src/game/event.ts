@@ -1,5 +1,5 @@
 import { Game } from './game';
-import { isInRange } from './utils';
+import { arrayIncludes, isInRange } from './utils';
 
 export interface Event {
 	title: string;
@@ -22,7 +22,7 @@ export const allEvents: { [id: string]: Event } = {
 		},
 		trigger(game) {
 			game.money += 2000;
-			game.gigsData += 800;
+			game.data += 800;
 		}
 	},
 	conference: {
@@ -56,6 +56,17 @@ export const allEvents: { [id: string]: Event } = {
 			'This is exciting news for the big data world!',
 		precondition(game) {
 			return game.researchedIds.length >= 4;
+		},
+		trigger: noOp
+	},
+	privacy1: {
+		title: 'Public Privacy',
+		description:
+			'Some recent data leaks from other companies have placed privacy back into the public eye. ' +
+			'Luckily, you haven\'t had any leaks yourself, but you might want to be careful with what you ' +
+			'do with people\'s data...',
+		precondition(game) {
+			return arrayIncludes(game.researchedIds, 'money2');
 		},
 		trigger: noOp
 	}
