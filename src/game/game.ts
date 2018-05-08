@@ -10,7 +10,7 @@ import {
 	numToUnitString,
 	padToTwoDigits,
 	roundToDigits,
-	ValueWithUnit,
+	ValueWithUnit
 } from './utils';
 
 type $Stat = Record<'value' | 'unit', JQuery>;
