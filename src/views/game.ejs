@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%- include('partials/header', { title: 'big data game' }) %>
+        <%- include('partials/header', { title: 'Big Data Simulator 2018 | Play' }) %>
         <link rel="stylesheet" href="css/game.css">
     </head>
     <body>
         <div id="content">
             <div id="left-panel">
                 <div id="main-panel" class="flex-content">
-                    <div id="big-number-stats" class="flex-content">
+                    <div class="big-number-stats flex-content">
                         <div id="data" class="big-stat">
                             <h3>Data</h3>
                             <p><span class="value">0</span> <span class="unit">GB</span></p>
@@ -22,16 +22,21 @@
                             <p><span class="value">1</span> <span class="unit">GB</span></p>
                         </div>
                     </div>
+                    <div class="big-number-stats flex-content">
+                        <div id="data-per-sec" class="big-stat">
+                            <h3>Data/Second</h3>
+                            <p><span class="value">0</span> <span class="unit">GB</span></p>
+                        </div>
+                        <div id="money-per-gig" class="big-stat">
+                            <h3>Money/GB</h3>
+                            <p><span class="unit">$</span><span class="value">5</span></p>
+                        </div>
+                    </div>
                     <div class="btn-group" role="group">
                         <button type="button" class="btn btn-primary" id="collect-data">Collect Data</button>
                         <button type="button" class="btn btn-success" id="sell-data" data-toggle="tooltip">Sell All Data</button>
                         <button type="button" class="btn btn-warning" id="sell-half-data" data-toggle="tooltip">Sell Half of Data</button>
                     </div>
-                    <!--<p id="data">Data: <span>0 GB</span></p>-->
-                    <!--<p id="money">Money: $<span>0</span></p>-->
-                    <!--<p id="data-per-click">Data gained per click: <span>1 GB</span></p>-->
-                    <p id="data-per-sec">Data gained per second: <span>0 GB</span></p>
-                    <p id="money-per-gig">Money gained per GB data sold: $<span>5</span></p>
                 </div>
                 <hr>
                 <div id="events" class="flex-content">

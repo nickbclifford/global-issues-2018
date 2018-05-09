@@ -1,14 +1,20 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <%- include('partials/header', { title: 'big data game' }) %>
+        <%- include('partials/header', { title: 'Big Data Simulator 2018' }) %>
         <link rel="stylesheet" href="css/index.css">
     </head>
     <body>
         <div id="menu" class="flex-content">
-            <h1>Big Data Game</h1>
-            <a href="/game" class="btn btn-lg btn-primary">Play!</a>
+            <h1>Big Data Simulator 2018</h1>
+            <h4>Created by Nick Clifford</h4>
+            <div class="btn-group-vertical">
+                <a href="/game" class="btn btn-lg btn-primary">Play!</a>
+                <a href="/tutorial" class="btn btn-lg btn-info">Tutorial</a>
+                <a href="#" class="btn btn-lg btn-warning" disabled onclick="alert('Whoops, I haven\'t finished the essay yet!')">Essay</a>
+                <a href="/bibliography" class="btn btn-lg btn-success">Citations</a>
+            </div>
         </div>
-    <%- include('partials/footer') %>
+        <%- include('partials/footer') %>
     </body>
 </html>

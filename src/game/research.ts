@@ -90,11 +90,49 @@ export const availableResearch: { [id: string]: Research } = {
 			'You really like the performance boost given by spreading your data collection processes over multiple ' +
 			'servers, but you feel like you could go further. Perhaps you could spread your servers around the world ' +
 			'to make sure each user has a fast connection to your platform. That would make your program even more efficient.',
-		costData: 1000,
+		costData: 750,
 		costMoney: 10000,
 		prereqs: ['clicker2', 'data2'],
 		onResearch(game) {
 			game.autoClickerTime = 450;
+		}
+	},
+	data3: {
+		title: 'Image Analysis',
+		description:
+			'You\'ve been analyzing the contents of people\'s text posts and status updates for a while now. ' +
+			'However, it recently occurred to you that with machine learning, you can now properly analyze the content ' +
+			'of pictures posted by your users and collect even more data.',
+		costData: 1250,
+		costMoney: 7500,
+		prereqs: ['data2'],
+		onResearch(game) {
+			game.dataPerClick = 10;
+		}
+	},
+	money3: {
+		title: 'Individual Profile Refinement',
+		description:
+			'Your advertisers have been loving the user profiles you\'ve built for them, but they want more data. ' +
+			'They think the profiles you\'re building aren\'t detailed enough. They want you to incorporate even ' +
+			'<em>more</em> data into each profile, but with the incentive of <em>heavy</em> compensation. Are you in?',
+		costData: 2000,
+		costMoney: 15000,
+		prereqs: ['money2'],
+		onResearch(game) {
+			game.moneyPerGig = 50;
+		}
+	},
+	data4: {
+		title: 'Mass Data Collection',
+		description:
+			'A lot of your users seem to be concentrated in urban areas. What if you were able to generate data ' +
+			'based on each city as a whole? You could generate even more data than you are right now.',
+		costData: 3000,
+		costMoney: 30000,
+		prereqs: ['data3'],
+		onResearch(game) {
+			game.dataPerClick = 20;
 		}
 	}
 };

@@ -22,8 +22,23 @@ app.get('/game', (req, res) => {
 	res.render('game');
 });
 
+// noinspection JSUnresolvedFunction
+app.get('/tutorial', (req, res) => {
+	res.render('tutorial');
+});
+
+// noinspection JSUnresolvedFunction
+app.get('/success', (req, res) => {
+	res.render('success');
+});
+
+// noinspection JSUnresolvedFunction
+app.get('/bibliography', (req, res) => {
+	res.render('bibliography');
+});
+
 // turn on server
 
-app.listen(3000, () => {
-    console.log('server listening on *:3000');
+app.listen(2200, () => {
+    console.log('server listening on *:2200');
 });

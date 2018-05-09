@@ -14,7 +14,7 @@ import {
 } from './utils';
 
 type $Stat = Record<'value' | 'unit', JQuery>;
-type BigNumberStats = 'data' | 'money' | 'data-per-click';
+type BigNumberStats = 'data' | 'money' | 'data-per-click' | 'data-per-sec' | 'money-per-gig';
 
 export class Game {
 
@@ -28,17 +28,14 @@ export class Game {
 	private _data = 0;
 	private _money = 0;
 	private _dataPerClick = 1;
-
 	private _moneyPerGig = 5;
-	private $moneyPerGig = $('#money-per-gig span');
-
 	private _autoClickerTime = 0;
-	private $dataPerSec = $('#data-per-sec span');
+
 	private intervalId?: number;
 
 	constructor() {
 		const builtStats = {} as any;
-		for (const id of ['data', 'money', 'data-per-click']) {
+		for (const id of ['data', 'money', 'data-per-click', 'data-per-sec', 'money-per-gig']) {
 			builtStats[id] = {
 				value: $(`#${id} span.value`),
 				unit: $(`#${id} span.unit`)
@@ -126,7 +123,7 @@ export class Game {
 
 			if (item.prereqs) {
 				$item.append(`
-					<h5><strong>Prerequisites: </strong>${item.prereqs.map(i => availableResearch[i].title).join(', ')}</h5>
+					<h5><strong>Prerequisite Research: </strong>${item.prereqs.map(i => availableResearch[i].title).join(', ')}</h5>
 				`);
 			}
 
@@ -156,6 +153,10 @@ export class Game {
 	set money(value: number) {
 		this._money = value;
 
+		if (value >= 250_000) {
+			window.location.href = window.location.origin + '/success';
+		}
+
 		this.updateBigNumberStat('money', { value, unit: '$' });
 		this.checkClickHandlers();
 	}
@@ -177,7 +178,7 @@ export class Game {
 	set moneyPerGig(value: number) {
 		this._moneyPerGig = value;
 
-		this.$moneyPerGig.text(roundToDigits(value, 2));
+		this.updateBigNumberStat('money-per-gig', { value, unit: '$' });
 	}
 
 	// core mechanics
@@ -218,11 +219,11 @@ export class Game {
 		clearInterval(this.intervalId);
 
 		if (value === 0) {
-			this.$dataPerSec.text('0 GB');
+			this.updateBigNumberStat('data-per-sec', { value: 0, unit: 'GB' });
 			return;
 		}
 
-		this.$dataPerSec.text(numToUnitString(this.dataPerClick / (value / 1000)));
+		this.updateBigNumberStat('data-per-sec', numberToUnits(this.dataPerClick / (value / 1000)));
 		this.intervalId = setInterval(() => this.click(), value);
 	}
 
@@ -235,7 +236,7 @@ export class Game {
 
 		const item = availableResearch[id];
 
-		if (item.prereqs && item.prereqs!.every(p => arrayIncludes(this.researchedIds, p))) {
+		if (item.prereqs && !item.prereqs!.every(p => arrayIncludes(this.researchedIds, p))) {
 			throw new Error('Missing prerequisite to research!');
 		}
 
@@ -252,6 +253,12 @@ export class Game {
 		item.onResearch(this);
 
 		this.researchedIds.push(id);
+
+		if (this.researchedIds.length === Object.keys(availableResearch).length) {
+			$('#research').append(`
+				<p>No research remaining!</p>
+			`);
+		}
 	}
 
 	private checkClickHandlers() {
@@ -262,7 +269,7 @@ export class Game {
 
 			if (itemObj.costData > this.data ||
 				itemObj.costMoney > this.money ||
-				(itemObj.prereqs && itemObj.prereqs!.every(p => arrayIncludes(this.researchedIds, p)))) {
+				(itemObj.prereqs && !itemObj.prereqs!.every(p => arrayIncludes(this.researchedIds, p)))) {
 				$item.off('click').on('click', () => {
 					$item
 						.animate({ backgroundColor: '#d98c8c' }, 150)

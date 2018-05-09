@@ -69,5 +69,32 @@ export const allEvents: { [id: string]: Event } = {
 			return arrayIncludes(game.researchedIds, 'money2');
 		},
 		trigger: noOp
+	},
+	govContract: {
+		title: 'Government Contract',
+		description:
+			'The US government has taken note of your impressive data handling capabilities and wants to enter ' +
+			'an agreement with your company. They will allow you access to some of their supercomputing power ' +
+			'in exchange for you processing some of their data. Sounds good to you!',
+		precondition(game) {
+			return arrayIncludes(game.triggeredEvents, 'openGov');
+		},
+		trigger(game) {
+			game.autoClickerTime /= 1.25;
+		}
+	},
+	privacy2: {
+		title: '#DeleteBookface',
+		description:
+			'Uh oh! People have realized the amount of data you\'ve been collecting on them and selling is infringing ' +
+			'their basic right to privacy. A movement has started to boycott your social network. You\'re losing business! ' +
+			'Time to do some damage control.',
+		precondition(game) {
+			return arrayIncludes(game.triggeredEvents, 'privacy1') && game.dataPerClick >= 10 && game.moneyPerGig >= 50;
+		},
+		trigger(game) {
+			game.dataPerClick /= 2;
+			game.moneyPerGig /= 2;
+		}
 	}
 };

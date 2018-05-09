@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<%- include('partials/header', { title: 'Big Data Simulator 2018 | Tutorial' }) %>
+		<link rel="stylesheet" href="css/tutorial.css">
+	</head>
+	<body>
+		<div class="flex-content">
+			<div id="tutorial" class="flex-content">
+				<h1>Tutorial</h1>
+				<hr>
+				<h2>Introduction</h2>
+				<p>
+					You are the CEO of a social network company called Bookface.
+					You've been paying close attention to the tech industry and have realized that big data is the future, so you've made it your goal to implement it into your business plan.
+					You'll need to collect data from your users, sell it to advertisers for a profit, and research new ways to utilize big data to achieve your goals.
+				</p>
+				<h2>How To Play</h2>
+				<p>
+					When you start the game, you'll see a large <span class="btn btn-sm btn-primary">Collect Data</span> button. Click this to collect some data on your users' usage habits.
+					At the beginning, this will only generate 1 GB of data per click, but as you continue and research more things, this number will increase.
+					You can monitor how much data you're generating per click with the "<strong>Data/Click</strong>" statistic.
+					<br>
+					Once you've accumulated some data, you can choose to sell it in exchange for money. To do this, click on the <span class="btn btn-sm btn-success">Sell All Data</span> button.
+					This will exchange all data you have available for money at the rate shown by the "<strong>Money/GB</strong>" statistic. You will need this money for research.
+					There is also a button available to <span class="btn btn-sm btn-warning">Sell Half of Data</span> in case you need to sell some data but you still want to keep some of it.
+				</p>
+				<h3>Research</h3>
+				<p>
+					On the right side of the interface is the available research list. Research is the main way of progressing through the game.
+					Each research item has a given data and money cost, but after paying these fees, a buff of some kind is applied to your game.
+					This is usually either increasing the amount of data you gather per click, how quickly data is automatically gathered, or the price at which you sell your data.
+					<br>
+					To acquire a research item, simply click on the item in the list. If you can afford the data and money fees, they will be deducted, the item will fade from the list, and you will be given a buff.
+					If you cannot afford the fees or you are missing a prerequisite research item, the item will flash red and remain in the list.
+				</p>
+				<h3>Events</h3>
+				<p>
+					Every 20 seconds, there is a 50% chance of a random event occurring. Some of these events are benign; however, some other events can boost or slow down your data production or affect your money balance.
+					The list of events that have occurred and the times they occurred can be seen in the <strong>Event Log</strong> in the lower left corner.
+				</p>
+				<h3>Winning</h3>
+				<p>
+					Since this game is a spin-off of clicker games like Cookie Clicker, you can't really lose.
+					However, the game is considered "won" once you reach $250,000 in your balance.
+				</p>
+				<a href="/game" class="btn btn-lg btn-primary">Alright, I'm ready. Let's go!</a>
+			</div>
+		</div>
+	</body>
+</html>
