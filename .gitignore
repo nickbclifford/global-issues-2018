@@ -1,6 +1,6 @@
 # public folder, except for images
-public
-!public/img
+src/public/*
+!src/public/img/*
 
 # cause I guess my global ignore doesn't work on Windows?
 .idea
