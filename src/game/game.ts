@@ -85,7 +85,13 @@ export class Game {
 
 		// bind buttons to actions
 		const $dataBtn = $('#collect-data');
-		$dataBtn.on('click', () => this.click());
+		$dataBtn
+			.on('click', () => this.click())
+			.on('keypress', e => {
+				if (e.keyCode === 13) {
+					e.preventDefault();
+				}
+			});
 
 		const $sellBtn = $('#sell-data');
 		$sellBtn
